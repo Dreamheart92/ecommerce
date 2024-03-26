@@ -9,34 +9,48 @@ export default function useHttp(url, initialValue, config) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
 
-    async function sendRequest() {
+    async function sendRequest(body) {
         try {
             setIsLoading(true);
+
+            if (body) {
+                config.body = JSON.stringify(body);
+            }
+
             const response = await sendHttpRequest(url, config);
             const resData = await response.json();
 
             if (!response.ok) {
-                throw new Error(resData.message || 'Something went wrong. Please try again later.');
+                const error = new Error('Request failed');
+                error.data = resData;
+                throw error;
             }
 
             setData(resData);
             setIsLoading(false);
 
-        } catch (err) {
-            setError(err.message);
+        } catch (error) {
+            setError(error.data);
             setIsLoading(false);
         }
     }
 
     useEffect(() => {
-        sendRequest();
+        if (!config) {
+            sendRequest();
+        }
 
     }, [url, config])
+
+    const setCustomError = (error) => {
+        setError(error);
+    }
 
     return {
         data,
         isLoading,
         error,
+        setCustomError,
         sendRequest
     }
 }

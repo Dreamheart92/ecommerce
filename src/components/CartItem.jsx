@@ -1,19 +1,20 @@
-import { useContext } from "react";
-import CartContext from "../context/CartContext.jsx";
+import { useDispatch } from "react-redux"
+
+import { cartActions } from "../store/cart-slice.js";
 
 export default function CartItem({ item }) {
-    const { incrementItem, decrementItem, removeItemFromCart } = useContext(CartContext);
+    const dispatch = useDispatch();
 
     const onIncrementItem = (item) => {
-        incrementItem(item);
+        dispatch(cartActions.incrementItem({ item }));
     }
 
     const onDecrementItem = (item) => {
-        decrementItem(item);
+        dispatch(cartActions.decrementItem({ item }));
     }
 
     const onRemoveItemFromCart = (item) => {
-        removeItemFromCart(item);
+        dispatch(cartActions.removeItemFromCart({ item }));
     }
 
     return (

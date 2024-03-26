@@ -1,15 +1,18 @@
-import { useParams } from "react-router-dom";
-import useHttp from "../hooks/useHttp.js"
+import { useState } from "react";
+import { useLoaderData, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import Button from "../components/Button.jsx";
-import { useContext, useState } from "react";
-import CartContext from "../context/CartContext.jsx";
+
+import { cartActions } from "../store/cart-slice.js";
+import useHttp from "../hooks/useHttp.js";
+import { apiEndpoints } from "../api/api-endpoints.js";
 
 export default function Details() {
     const { id } = useParams();
-    const { addItemToCart } = useContext(CartContext);
+    const { data: item, isLoading, error } = useHttp(apiEndpoints.items.item + '/' + id);
 
-    const { data: item, isLoading, error } = useHttp(`http://localhost:3000/product/${id}`);
+    const dispatch = useDispatch();
 
     const [selectedSize, setSelectedSize] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
@@ -22,14 +25,9 @@ export default function Details() {
         setIsButtonClicked(true);
 
         if (selectedSize !== null) {
-            addItemToCart(item, selectedSize);
+            dispatch(cartActions.addItemToCart({ item, size: selectedSize }));
+            dispatch(cartActions.showCart());
         }
-    }
-
-    if (isLoading) {
-        return (
-            <h3>Loading...</h3>
-        )
     }
 
     return (
@@ -43,7 +41,7 @@ export default function Details() {
             <section className="p-10 w-[30%] fixed right-24">
                 <section className="flex justify-between items-center">
                     <h1 className="font-bold text-xl">{item?.name}</h1>
-                    <p className=" font-medium">$ {item?.price.toFixed(2)}</p>
+                    <p className=" font-medium">${item?.price.toFixed(2)}</p>
                 </section>
 
                 <section>

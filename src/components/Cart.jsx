@@ -1,21 +1,29 @@
-import { useContext, useEffect } from "react"
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-import CartContext from "../context/CartContext.jsx"
-import Button from "./Button.jsx";
 import CartItem from "./CartItem.jsx";
+
+import { cartActions } from "../store/cart-slice.js";
 
 const body = document.body;
 const cartRoot = document.getElementById('cart');
 
 export default function Cart() {
-    const { cartItems,
-        isCartShown,
-        handleCartState: onCloseCart, } = useContext(CartContext);
+    const { cartItems, isCartShown } = useSelector(state => state.cart);
+
+    const dispatch = useDispatch();
 
     const isCartEmpty = cartItems.length <= 0;
-    const openCartStyle = isCartShown ? 'visible' : 'hidden';
+    const cartVisibilityClass = isCartShown ? 'translate-x-0' : 'translate-x-full';
     const totalPrice = cartItems.reduce((totalPrice, item) => totalPrice + item.price * item.quantity, 0);
+
+    useEffect(() => {
+        return () => {
+            onCloseCart();
+        }
+    }, [])
 
     useEffect(() => {
         if (isCartShown) {
@@ -29,13 +37,17 @@ export default function Cart() {
         }
     }, [isCartShown])
 
+    const onCloseCart = () => {
+        dispatch(cartActions.closeCart());
+    }
+
     return createPortal(
-        <section className={`bg-stone-900 bg-opacity-70 fixed z-[100] inset-0 w-full h-full ${openCartStyle}`}>
-            <section className={`fixed right-0 top-0 z-[101] h-screen bg-white w-[25%] ${openCartStyle}`}>
+        <section className={isCartShown ? 'active' : undefined}>
+            <section className={`fixed right-0 top-0 z-[101] h-screen bg-white w-[25%] ${cartVisibilityClass} transition duration-300`}>
                 <section className="p-4 flex justify-between items-center border">
                     <h1 className="text-xl font-bold">Cart</h1>
                     <button
-                        onClick={() => onCloseCart(false)}
+                        onClick={onCloseCart}
                         className="text-xl font-medium">X</button>
                 </section>
 
@@ -45,15 +57,23 @@ export default function Cart() {
                     }
 
                     {!isCartEmpty && isCartShown &&
-                        cartItems.map(item => {
-                            return <CartItem item={item} />
-                        })
+                        <>
+                            {cartItems.map(item => {
+                                return <CartItem key={item.size.id + item.name} item={item} />
+                            })}
+
+                            <section className="absolute bottom-10 w-full">
+                                <Link
+                                    to={'/checkout'}
+                                    className="flex justify-center">
+                                    <button className="border border-stone-900 w-[80%] py-2">Checkout / ${totalPrice}</button>
+                                </Link>
+                            </section>
+                        </>
                     }
-                    <section className="flex justify-center absolute bottom-10 w-full">
-                        <button className="border border-stone-900 w-[80%] py-2">Checkout / ${totalPrice}</button>
-                    </section>
+
                 </section>
             </section>
-        </section >
+        </section>
         , cartRoot)
 };
