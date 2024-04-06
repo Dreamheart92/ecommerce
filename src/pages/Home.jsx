@@ -4,20 +4,25 @@ import Section from "../components/Section.jsx";
 import CategoryCard from "../components/CategoryCard.jsx";
 
 import { categories } from "../data.js";
-import useHttp from "../hooks/useHttp.js";
 import { apiEndpoints } from "../api/api-endpoints.js";
-
+import { useLoaderData } from "react-router-dom";
 
 export default function Home() {
-    const { data: items, isLoading, error } = useHttp(apiEndpoints.items.allProducts + '?page=1', []);
+    const items = useLoaderData();
 
     return (
         <>
             <Hero />
-            <Items label='New arrivals' isLoading={isLoading} items={items} />
+            <Items label='New arrivals' items={items} />
             <Section>
                 {categories.map(category => <CategoryCard key={category.name} category={category} />)}
             </Section>
         </>
     )
+}
+
+export const loader = async () => {
+    const items = fetch(apiEndpoints.items.allProducts + '?page=1').then(response => response.json());
+
+    return items;
 }

@@ -13,9 +13,19 @@ import SignUp from './pages/SignUp.jsx'
 import Login from './pages/Login.jsx'
 
 import store from './store/store.js'
-import { loader as checkoutLoader } from './pages/Checkout.jsx'
+
+import { loader as checkoutLoader } from './pages/Checkout.jsx';
+import { loader as catalogueLoader } from './pages/Catalogue.jsx';
+import { loader as homeLoader } from './pages/Home.jsx';
+import { loader as searchLoader } from './pages/SearchPage.jsx';
+import { loader as accountLoader } from './pages/Account.jsx';
+import { loader as detailsLoader } from './pages/Details.jsx';
+import { loader as orderDetailsLoader } from './components/Account/Order/OrderDetails.jsx';
 
 import Checkout from './pages/Checkout.jsx';
+import SearchPage from './pages/SearchPage.jsx'
+import Account from './pages/Account.jsx'
+import OrderDetails from './components/Account/Order/OrderDetails.jsx'
 
 const router = createBrowserRouter([
   {
@@ -24,14 +34,17 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+        loader: homeLoader
       },
       {
         path: '/catalogue/:category',
         element: <Catalogue />,
+        loader: catalogueLoader
       },
       {
         path: '/details/:id',
         element: <Details />,
+        loader: detailsLoader
       },
       {
         path: '/signup',
@@ -40,6 +53,23 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />
+      },
+      {
+        path: '/products/search',
+        element: <SearchPage />,
+        loader: searchLoader
+      },
+      {
+        path: '/account/:activeView',
+        element: <Account />,
+        loader: accountLoader,
+        children: [
+          {
+            path: 'order/:id',
+            element: <OrderDetails />,
+            loader: orderDetailsLoader
+          }
+        ]
       },
     ],
   },
@@ -51,9 +81,9 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  // </React.StrictMode>,
+  </React.StrictMode>,
 )

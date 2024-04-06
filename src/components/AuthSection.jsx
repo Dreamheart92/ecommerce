@@ -1,4 +1,5 @@
 export default function AuthSection({ title, caption, children }) {
+
     return (
         <section className="w-full h-screen bg-stone-50">
             <section className="flex flex-col pt-[10%] gap-2 items-center">
@@ -10,4 +11,5 @@ export default function AuthSection({ title, caption, children }) {
             </section>
         </section>
     )
+
 }

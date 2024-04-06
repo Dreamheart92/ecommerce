@@ -12,7 +12,7 @@ export default function Input({ label, error, size, ...props }) {
             }
             <input
                 {...props}
-                className={`border border-stone-300 p-4 focus:bg-stone-100 focus:outline-none focus:border-stone-900 ${baseSize}`} />
+                className={`disabled:text-stone-400 border border-stone-300 p-4 focus:bg-stone-100 focus:outline-none focus:border-stone-900 ${baseSize}`} />
 
             {error &&
                 <p className="text-red-700 mt-2 text-sm">{error}</p>

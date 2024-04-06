@@ -1,18 +1,19 @@
 import { useState } from "react";
-import { useLoaderData, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useLoaderData } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { cartActions } from "../store/cart-slice.js";
+import { wishlistActions } from "../store/wishlist-slice.js";
+import { apiEndpoints } from "../api/api-endpoints.js";
 
 import Button from "../components/Button.jsx";
 
-import { cartActions } from "../store/cart-slice.js";
-import useHttp from "../hooks/useHttp.js";
-import { apiEndpoints } from "../api/api-endpoints.js";
-
 export default function Details() {
-    const { id } = useParams();
-    const { data: item, isLoading, error } = useHttp(apiEndpoints.items.item + '/' + id);
-
+    const item = useLoaderData();
     const dispatch = useDispatch();
+
+    const wishlist = useSelector(state => state.wishlist);
+    const isItemOnTheWishlist = wishlist.findIndex(wishlistItem => wishlistItem === item._id);
 
     const [selectedSize, setSelectedSize] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
@@ -29,6 +30,15 @@ export default function Details() {
             dispatch(cartActions.showCart());
         }
     }
+
+    const handleWishlist = () => {
+        if (isItemOnTheWishlist !== -1) {
+            dispatch(wishlistActions.removeItemFromWishlist({ itemId: item._id }));
+        } else {
+            dispatch(wishlistActions.addItemToWishlist({ itemId: item._id }));
+        }
+    }
+
 
     return (
         <section className="w-full h-full flex">
@@ -69,16 +79,35 @@ export default function Details() {
                         )}
                     </section>
 
-                    <section className="pt-8">
-                        <Button
-                            onClick={handleAddToCart}
-                            style=' w-full'>Add to cart</Button>
-                        {isButtonClicked && selectedSize === null &&
-                            <p className=" text-red-700 pt-2">Please select a size.</p>
-                        }
+                    <section className="pt-8 flex gap-2">
+                        <section className="w-full">
+                            <Button
+                                onClick={handleAddToCart}
+                                style=' w-full'>Add to cart</Button>
+                            {isButtonClicked && selectedSize === null &&
+                                <p className=" text-red-700 pt-2">Please select a size.</p>
+                            }
+                        </section>
+
+                        <section>
+                            <Button
+                                onClick={handleWishlist}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill={isItemOnTheWishlist !== -1 ? 'currentColor' : 'none'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                </svg>
+                            </Button>
+                        </section>
                     </section>
                 </section>
             </section>
         </section>
     )
 }
+
+export const loader = async ({ request, params }) => {
+    const { id: itemId } = params;
+
+    const item = await fetch(apiEndpoints.items.item + '/' + itemId);
+
+    return item;
+};

@@ -2,10 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import cartSlice from "./cart-slice.js";
 import userSlice, { userActions } from "./user-slice.js";
+import wishlistSlice from "./wishlist-slice.js";
 
 const store = configureStore({
-    reducer: { cart: cartSlice, user: userSlice }
+    reducer: { cart: cartSlice, user: userSlice, wishlist: wishlistSlice }
 })
+
+// TODO Probably move this to the app???
 
 addEventListener('storage', () => {
     setUserDataToStore();

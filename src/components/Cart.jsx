@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import CartItem from "./CartItem.jsx";
 
@@ -11,6 +11,7 @@ const body = document.body;
 const cartRoot = document.getElementById('cart');
 
 export default function Cart() {
+    const location = useLocation();
     const { cartItems, isCartShown } = useSelector(state => state.cart);
 
     const dispatch = useDispatch();
@@ -20,19 +21,34 @@ export default function Cart() {
     const totalPrice = cartItems.reduce((totalPrice, item) => totalPrice + item.price * item.quantity, 0);
 
     useEffect(() => {
+        onCloseCart();
+    }, [location])
+
+    useEffect(() => {
         return () => {
             onCloseCart();
         }
     }, [])
 
     useEffect(() => {
+        const closeCart = (event) => {
+            const backdrop = document.getElementById('backdrop');
+
+            if (event.target.contains(backdrop)) {
+                onCloseCart();
+            }
+        }
+
         if (isCartShown) {
+            document.addEventListener('click', closeCart);
             body.style.overflow = 'hidden';
         } else {
+            document.removeEventListener('click', closeCart);
             body.style.overflow = '';
         }
 
         return () => {
+            document.removeEventListener('click', closeCart);
             body.style.overflow = '';
         }
     }, [isCartShown])
@@ -42,7 +58,7 @@ export default function Cart() {
     }
 
     return createPortal(
-        <section className={isCartShown ? 'active' : undefined}>
+        <section id="backdrop" className={isCartShown ? 'active' : undefined}>
             <section className={`fixed right-0 top-0 z-[101] h-screen bg-white w-[25%] ${cartVisibilityClass} transition duration-300`}>
                 <section className="p-4 flex justify-between items-center border">
                     <h1 className="text-xl font-bold">Cart</h1>

@@ -70,7 +70,7 @@ export default function Checkout() {
                     <section className="mt-4 flex gap-4">
                         <button className="border border-stone-400 px-8 py-2">VIEW ORDER</button>
                         {/* <button className=" bg-orange-400 px-8 py-2 text-white rounded-sm">CONTINUE SHOPPING</button> */}
-                        <Link to={'/catalogue'}><Button>CONTINUE SHOPPING</Button></Link>
+                        <Link to={'/catalogue/all'}><Button>CONTINUE SHOPPING</Button></Link>
                     </section>
                 </section>
             </section>
