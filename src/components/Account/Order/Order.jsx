@@ -33,11 +33,10 @@ export default function Order({ order }) {
 
                 {order.products.slice(0, 4).map(product => {
                     return (
-                        <Link to={'/details/' + product._id._id}>
-                            <section
-                                key={product._id.images[0] + order._id}
-                                className="w-[8em] h-[10em]"
-                            >
+                        <Link
+                            key={product._id.images[0] + order._id}
+                            to={'/details/' + product._id._id}>
+                            <section className="w-[8em] h-[10em]">
                                 <img
                                     className="w-full h-full object-cover"
                                     src={product._id.images[0]} alt="" />

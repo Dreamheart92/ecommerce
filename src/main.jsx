@@ -60,6 +60,11 @@ const router = createBrowserRouter([
         loader: searchLoader
       },
       {
+        path: '/checkout',
+        element: <Checkout />,
+        loader: checkoutLoader
+      },
+      {
         path: '/account/:activeView',
         element: <Account />,
         loader: accountLoader,
@@ -73,11 +78,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: '/checkout',
-    element: <Checkout />,
-    loader: checkoutLoader
-  }
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(

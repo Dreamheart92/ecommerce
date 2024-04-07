@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../store/cart-slice.js";
 import { wishlistActions } from "../store/wishlist-slice.js";
 import { apiEndpoints } from "../api/api-endpoints.js";
+import { getUserData } from "../utility/user.js";
 
 import Button from "../components/Button.jsx";
 
 export default function Details() {
-    const item = useLoaderData();
+    const { item, isLoggedIn } = useLoaderData();
     const dispatch = useDispatch();
 
     const wishlist = useSelector(state => state.wishlist);
@@ -38,7 +39,6 @@ export default function Details() {
             dispatch(wishlistActions.addItemToWishlist({ itemId: item._id }));
         }
     }
-
 
     return (
         <section className="w-full h-full flex">
@@ -89,9 +89,9 @@ export default function Details() {
                             }
                         </section>
 
-                        <section>
+                        <section className="relative">
                             <Button
-                                onClick={handleWishlist}>
+                                onClick={() => isLoggedIn ? handleWishlist() : null}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill={isItemOnTheWishlist !== -1 ? 'currentColor' : 'none'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                                 </svg>
@@ -105,9 +105,10 @@ export default function Details() {
 }
 
 export const loader = async ({ request, params }) => {
+    const isLoggedIn = getUserData() !== null;
     const { id: itemId } = params;
 
-    const item = await fetch(apiEndpoints.items.item + '/' + itemId);
-
-    return item;
+    const response = await fetch(apiEndpoints.items.item + '/' + itemId);
+    const item = await response.json();
+    return { item, isLoggedIn };
 };

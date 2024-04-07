@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLoaderData, useParams, Link, useNavigate, Outlet } from "react-router-dom";
+import { useLoaderData, useParams, Link, useNavigate, Outlet, redirect } from "react-router-dom";
 import { getUserData } from "../utility/user.js";
 import { capitalizeFullName } from "../utility/util.js";
 import { useDispatch } from "react-redux";
@@ -108,7 +108,13 @@ export default function Account() {
 }
 
 export const loader = async () => {
-    const userId = getUserData().user.id;
+    const isLoggedIn = getUserData();
+
+    if (!isLoggedIn) {
+        return redirect('/login');
+    }
+
+    const userId = isLoggedIn.user.id;
     const userData = await fetch('http://localhost:3000/user/' + userId);
 
     return userData;

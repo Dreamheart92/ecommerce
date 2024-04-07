@@ -25,3 +25,18 @@ input {
 .box-shadow {
     box-shadow: 0 .125rem 1rem rgba(0, 0, 0, .09);
 }
+
+#wishlist-container:hover #wishlist {
+    transform: translateX(-30%);
+    transition: transform 0.1s ease-in;
+}
+
+#wishlist-container:hover #quick-buy {
+    transform: translateY(-100%);
+    transition: transform 0.1s ease-in;
+}
+
+#wishlist {
+    right: 0;
+    transform: translateX(100%);
+}

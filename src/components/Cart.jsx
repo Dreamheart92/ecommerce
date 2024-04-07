@@ -12,9 +12,9 @@ const cartRoot = document.getElementById('cart');
 
 export default function Cart() {
     const location = useLocation();
+    const dispatch = useDispatch();
     const { cartItems, isCartShown } = useSelector(state => state.cart);
 
-    const dispatch = useDispatch();
 
     const isCartEmpty = cartItems.length <= 0;
     const cartVisibilityClass = isCartShown ? 'translate-x-0' : 'translate-x-full';

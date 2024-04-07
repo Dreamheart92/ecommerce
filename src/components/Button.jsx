@@ -1,5 +1,5 @@
 export default function Button({ children, variant = 'primary', style, ...props }) {
-    let baseClass = `text-${variant === 'text' ? 'black' : 'white'} text-md px-6 py-1 disabled:bg-stone-300`
+    let baseClass = `text-${variant === 'text' ? 'black' : 'white'} text-md px-6 py-2 disabled:bg-stone-300`
 
     if (variant === 'primary') {
         baseClass += ' bg-stone-900 hover:bg-stone-700'

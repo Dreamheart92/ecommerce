@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, redirect } from "react-router-dom";
+import { Link, redirect, useLoaderData } from "react-router-dom";
 
 import useHttp from "../hooks/useHttp.js";
 
@@ -16,11 +16,10 @@ import { httpConfig, submitHandler } from "../utility/util.js";
 import { getUserData } from "../utility/user.js";
 
 export default function Checkout() {
+    const userId = useLoaderData();
     const { data: orderData, isLoading, error, sendRequest } = useHttp(apiEndpoints.order.createOrder, null, httpConfig('Post'));
 
     const dispatch = useDispatch();
-
-    const { user } = useSelector(state => state.user.user);
 
     const items = useSelector(state => state.cart.cartItems);
     const totalPrice = items.reduce((totalPrice, item) => totalPrice + item.price * item.quantity, 0);
@@ -44,7 +43,7 @@ export default function Checkout() {
 
         const orderData = {
             userData,
-            userId: user.id,
+            userId,
             orderItems,
             price: totalPrice
         }
@@ -52,15 +51,31 @@ export default function Checkout() {
         sendRequest(orderData);
     }
 
+    const header = <header className="w-full flex justify-center items-center border border-stone-200 h-20">
+        <Link to={'/'}>
+            <h1 className="text-3xl font-bold">Logo</h1>
+        </Link>
+    </header>
+
+    if (items.length <= 0) {
+        return (
+            <>
+                {header}
+                <section className="w-full flex flex-col justify-center items-center h-full mt-12">
+                    <h1 className="font-semibold text-xl mb-4">Your cart is empty.</h1>
+                    <Link
+                        to={'/catalogue/all'}>
+                        <Button>Back to shop</Button>
+                    </Link>
+                </section>
+            </>
+        )
+    }
+
     if (orderData) {
         return (
-            <section className="flex flex-col h-screen">
-                <header className="w-full flex justify-center items-center border border-stone-200 h-20">
-                    <Link to={'/'}>
-                        <h1 className="text-3xl font-bold">Logo</h1>
-                    </Link>
-                </header>
-
+            <section className="flex flex-col h-screen w-screen">
+                {header}
                 <section className="flex flex-col pt-[10%] items-center w-full h-full">
                     <img className="w-20 h-20 mb-8" src={successIcon} alt="" />
                     <h1 className="text-xl font-bold">Order confirmed!</h1>
@@ -77,16 +92,10 @@ export default function Checkout() {
         )
     }
 
-
     return (
         <section>
-            <header className="w-full flex justify-center items-center border border-stone-200 h-20">
-                <Link to={'/'}>
-                    <h1 className="text-3xl font-bold">Logo</h1>
-                </Link>
-            </header>
-
-            <main className="w-full h-fit flex justify-center p-4">
+            {header}
+            <main className="w-screen h-fit flex justify-center p-4">
                 <section className="w-[80%] flex gap-4">
                     <section>
                         <form
@@ -214,10 +223,9 @@ export default function Checkout() {
 
 export const loader = () => {
     const isLoggedIn = getUserData();
-
     if (!isLoggedIn) {
         return redirect('/login');
     }
-
-    return null;
+    const userId = isLoggedIn.user.id;
+    return userId;
 }

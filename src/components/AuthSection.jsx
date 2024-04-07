@@ -11,5 +11,4 @@ export default function AuthSection({ title, caption, children }) {
             </section>
         </section>
     )
-
 }

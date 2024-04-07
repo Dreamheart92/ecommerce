@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Outlet, ScrollRestoration } from "react-router-dom";
+import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import Header from "./components/Header/Header.jsx";
@@ -33,6 +33,8 @@ function App() {
   const wishlist = useSelector(state => state.wishlist);
 
   const dispatch = useDispatch();
+
+  const isOnCheckoutPage = useLocation().pathname === '/checkout';
 
   useEffect(() => {
     setUserDataToStore();
@@ -70,19 +72,22 @@ function App() {
   useEffect(() => {
     if (user !== null) {
       const userId = user.user.id;
-      fetch('http://localhost:3000/user/wishlist/' + userId, {
-        method: 'Post',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify(wishlist)
-      })
+      const fetchWishlist = async () => {
+        await fetch('http://localhost:3000/user/wishlist/' + userId, {
+          method: 'Post',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify(wishlist)
+        })
+      }
+      fetchWishlist();
     }
   }, [wishlist])
 
   return (
     <main className="w-full h-full flex flex-col items-center">
-      <Header />
+      {!isOnCheckoutPage && <Header />}
       <Cart />
       <Outlet />
       <ScrollRestoration />

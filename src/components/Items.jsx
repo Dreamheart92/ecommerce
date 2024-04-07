@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+
 import Button from "./Button.jsx";
 import Card from "./Card.jsx";
 import Skeleton from "./Skeleton.jsx";
@@ -5,6 +7,7 @@ import Skeleton from "./Skeleton.jsx";
 const itemsLoading = new Array(7).fill(null);
 
 export default function Items({ label, items, isLoading }) {
+    const wishlist = useSelector(state => state.wishlist);
 
     if (isLoading) {
         return (
@@ -39,11 +42,17 @@ export default function Items({ label, items, isLoading }) {
             </section>
 
             <section className="flex gap-2">
-                {items.map(item =>
-                    <Card
-                        key={item._id}
-                        className="w-[14em] h-[22em]"
-                        item={item} />)}
+                {items.map(item => {
+                    const isOnWishlist = wishlist.find(wishlistItem => wishlistItem === item._id)
+                    return (
+                        <Card
+                            key={item._id}
+                            size="w-[14em] h-[22em]"
+                            item={item}
+                            isOnWishlist={isOnWishlist}
+                        />
+                    )
+                })}
             </section>
         </section>
     )

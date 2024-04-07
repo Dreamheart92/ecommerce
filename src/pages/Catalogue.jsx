@@ -1,11 +1,14 @@
 import { useLoaderData } from "react-router-dom";
+import { useSelector } from "react-redux";
 
+import { wishlistActions } from "../store/wishlist-slice.js";
 import { apiEndpoints } from "../api/api-endpoints.js";
 
 import Card from "../components/Card.jsx";
 import Filters from "../components/Filters.jsx";
 
 export default function Catalogue() {
+    const wishlist = useSelector(state => state.wishlist);
     const [items, filters, sortByOptions] = useLoaderData();
 
     return (
@@ -24,7 +27,17 @@ export default function Catalogue() {
             </section>
 
             <section className="w-full h-full grid grid-cols-3 gap-4">
-                {items?.map(item => <Card key={item?._id} className='w-[31em] h-[45em]' item={item} />)}
+                {items?.map(item => {
+                    const isOnWishlist = wishlist.find(wishlistItem => wishlistItem === item._id)
+                    return (
+                        <Card
+                            key={item?._id}
+                            size='w-[31em] h-[45em]'
+                            item={item}
+                            isOnWishlist={isOnWishlist}
+                        />
+                    )
+                })}
             </section>
         </section>
     )
