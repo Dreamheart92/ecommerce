@@ -54,7 +54,7 @@ export default function Account({ isLoggedIn }) {
         >
             {icon}
             {isLoggedIn && isHover &&
-                <section className="absolute bg-white top-6 -left-[3em] p-4 w-[22em] text-stone-900 flex flex-col gap-4 shadow-2xl border">
+                <section className="absolute bg-white top-6 -left-[12em] p-4 w-[22em] text-stone-900 flex flex-col gap-4 shadow-2xl border">
                     <Link className={menuItemsStyle} to={'/account/dashboard'}>
                         <span
                         >My account</span>

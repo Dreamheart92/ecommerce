@@ -4,8 +4,6 @@ import { useDispatch } from "react-redux";
 
 import { cartActions } from "../../../store/cart-slice.js";
 
-import Button from "../../Button.jsx";
-
 export default function Card({ item, onRemoveItemFromWishlist }) {
     const dispatch = useDispatch();
     const [isAddItemToCartClicked, setIsAddItemToCartClicked] = useState(false);
@@ -20,7 +18,7 @@ export default function Card({ item, onRemoveItemFromWishlist }) {
         <section
             key={item._id}
             className="flex flex-col gap-4 mb-4 relative">
-            <section key={item._id} className="w-[18em] h-[25em] relative">
+            <section key={item._id} className="w-[15em] h-[22em] lg:w-[18em] lg:h-[25em] relative">
                 <Link to={'/details/' + item._id}>
                     <img className="w-full h-full object-cover rounded-sm" src={item.images[0]} alt="" />
                 </Link>
@@ -35,29 +33,35 @@ export default function Card({ item, onRemoveItemFromWishlist }) {
                             </svg>
                         </section>
 
-                        <h1 className=" cursor-default">Select a size</h1>
-                        {item.variations.map(variation => {
-                            return (
-                                <button
-                                    onClick={() => handleAddItemToCart(item, variation)}
-                                    className="uppercase text-sm hover:bg-stone-300 w-full flex justify-center cursor-pointer">
-                                    {variation.name}
-                                </button>
-                            )
-                        }
-                        )}
+                        <h1 className="cursor-default mb-1">Select a size</h1>
+                        <section className="mb-2 w-full h-full">
+                            {item.variations.map(variation => {
+                                return (
+                                    <button
+                                        onClick={() => handleAddItemToCart(item, variation)}
+                                        className="uppercase text-sm hover:bg-stone-300 w-full flex justify-center cursor-pointer">
+                                        {variation.name}
+                                    </button>
+                                )
+                            }
+                            )}
+                        </section>
                     </section>
                 }
             </section>
-            <Button
+            {/* <Button
                 onClick={() => setIsAddItemToCartClicked(true)}>
                 Add to cart
-            </Button>
+            </Button> */}
 
-            <section className="absolute top-2 right-2 text-stone-400 hover:text-stone-500">
+            <button
+                onClick={() => setIsAddItemToCartClicked(true)}
+                className="border px-2 py-2 hover:border-stone-400">Add to cart</button>
+
+            <section className="absolute top-2 right-2 border bg-white rounded-full text-black hover:bg-black hover:text-white p-1">
                 <svg
                     onClick={() => onRemoveItemFromWishlist(item._id)}
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 cursor-pointer">
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 cursor-pointer">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
             </section>

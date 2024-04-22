@@ -22,7 +22,7 @@ export default function Wishlist({ wishlist, onRemoveItemFromWishlist }) {
 
     if (wishlist.length <= 0) {
         return (
-            <section className="flex flex-col gap-4">
+            <section className="flex flex-col gap-4 text-md">
                 <h1 className="font-semibold">You still do not have any items to the wishlist.</h1>
                 <Button
                     onClick={handleBackToShop}

@@ -3,6 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import useQuery from "../hooks/useQuery.js";
 import Filter from "./Filter.jsx";
 
+import { useWindowSize } from "../hooks/useWindowSize.js";
+import FilterArrow from "./FilterArrow.jsx";
+import { useLocation } from "react-router-dom";
+
 export const FILTERS_TYPES = {
     color: 'color',
     brand: 'brand',
@@ -21,6 +25,13 @@ export default function Filters({ filters, sortByOptions }) {
     const section = useRef();
     const [color, brand, size] = filters;
     const { addQuery, clearQuery } = useQuery();
+    const { isOnMobile } = useWindowSize();
+
+    const location = useLocation();
+
+    useEffect(() => {
+        setFiltersState(FILTERS_INITIAL_STATE)
+    }, [location.pathname])
 
     const [filtersState, setFiltersState] = useState(FILTERS_INITIAL_STATE);
 
@@ -64,7 +75,7 @@ export default function Filters({ filters, sortByOptions }) {
     }, []);
 
     return (
-        <section className="w-full flex justify-between">
+        <section className="w-full flex justify-between text-[.85em]">
             <section
                 ref={section}
                 className="w-[80%] flex gap-4">
@@ -93,13 +104,22 @@ export default function Filters({ filters, sortByOptions }) {
                 </Filter>
             </section>
 
-            <section className="relative">
-                <button
+            <section
+                className="relative">
+
+                <div
+                    className="flex gap-1 items-center cursor-pointer"
                     onClick={() => handleToggleFilter(FILTERS_TYPES.sortBy)}
-                >Sort by</button>
+                >
+                    <button>Sort by</button>
+                    <FilterArrow open={filtersState[FILTERS_TYPES.sortBy]} />
+                </div>
 
                 {filtersState[FILTERS_TYPES.sortBy] &&
-                    <section className="absolute bg-white border border-stone-200 shadow-xl flex flex-col gap-2 w-[10em] items-center justify-center">
+                    <section className={`absolute bg-white border border-stone-200 
+                    shadow-xl flex flex-col gap-2 w-[10em] items-center justify-center z-50
+                    ${isOnMobile ? '-left-12' : null}
+                    `}>
                         {sortByOptions.map(sort => {
                             const [query, { name, selected }] = Object.entries(sort)[0];
                             return (

@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'http://192.168.0.189:3000';
 
 export const apiEndpoints = {
     auth: {
@@ -13,4 +13,7 @@ export const apiEndpoints = {
     order: {
         createOrder: baseUrl + '/orders'
     },
+    collections: {
+        goingCoastal: baseUrl + '/collection/662007ecc7c9dab39f3cc2d0'
+    }
 }

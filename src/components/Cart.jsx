@@ -13,8 +13,8 @@ const cartRoot = document.getElementById('cart');
 export default function Cart() {
     const location = useLocation();
     const dispatch = useDispatch();
-    const { cartItems, isCartShown } = useSelector(state => state.cart);
 
+    const { cartItems, isCartShown } = useSelector(state => state.cart);
 
     const isCartEmpty = cartItems.length <= 0;
     const cartVisibilityClass = isCartShown ? 'translate-x-0' : 'translate-x-full';
@@ -59,15 +59,17 @@ export default function Cart() {
 
     return createPortal(
         <section id="backdrop" className={isCartShown ? 'active' : undefined}>
-            <section className={`fixed right-0 top-0 z-[101] h-screen bg-white w-[25%] ${cartVisibilityClass} transition duration-300`}>
+            <section className={`fixed right-0 top-0 z-[102] h-full bg-white w-[25em] ${cartVisibilityClass} transition duration-300`}>
                 <section className="p-4 flex justify-between items-center border">
-                    <h1 className="text-xl font-bold">Cart</h1>
-                    <button
+                    <h1 className="text-md font-bold">Cart</h1>
+                    <svg
                         onClick={onCloseCart}
-                        className="text-xl font-medium">X</button>
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 cursor-pointer">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
                 </section>
 
-                <section className=" overflow-auto h-[47em]">
+                <section className="overflow-auto h-[80%] text-[.85em]">
                     {isCartEmpty &&
                         <h1 className="flex justify-center mt-[75%] text-md font-semibold">You dont have any products in your cart.</h1>
                     }

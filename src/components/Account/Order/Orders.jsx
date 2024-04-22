@@ -1,9 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../Button.jsx";
 import Order from "./Order.jsx";
+import { useWindowSize } from "../../../hooks/useWindowSize.js";
+
+const mobileStyle = 'w-full h-full flex flex-col justify-center items-center gap-4';
+const desktopStyle = 'w-full h-full flex flex-col gap-4';
 
 export default function Orders({ orders }) {
     const navigate = useNavigate();
+
+    const { isOnMobile } = useWindowSize();
 
     const handleBackToShop = () => {
         navigate('/catalogue/all');
@@ -21,11 +27,9 @@ export default function Orders({ orders }) {
     }
 
     return (
-        <section className="w-full">
-            <h1 className="font-semibold text-xl">Orders</h1>
-            <section className="w-full h-fit mt-2 flex flex-col gap-4">
-                {orders.map(order => <Order key={order._id} order={order} />)}
-            </section>
+        <section className={isOnMobile ? mobileStyle : desktopStyle}>
+            {/* <h1 className="font-semibold text-xl">Orders</h1> */}
+            {orders.map(order => <Order key={order._id} order={order} />)}
         </section>
     )
 }

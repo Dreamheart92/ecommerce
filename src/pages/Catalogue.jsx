@@ -1,21 +1,15 @@
 import { useLoaderData } from "react-router-dom";
-import { useSelector } from "react-redux";
 
-import { wishlistActions } from "../store/wishlist-slice.js";
-import { apiEndpoints } from "../api/api-endpoints.js";
-
-import Card from "../components/Card.jsx";
 import Filters from "../components/Filters.jsx";
+import Layout from "../components/Layout.jsx";
+import GridProducts from "../components/GridProducts.jsx";
 
 export default function Catalogue() {
-    const wishlist = useSelector(state => state.wishlist);
-    const [items, filters, sortByOptions] = useLoaderData();
+    const [items, filters, sortByOptions, categories] = useLoaderData();
 
     return (
-        <section
-            className="flex flex-col items-center w-[80%]">
-
-            <section className="flex flex-col items-center gap-2 p-4 w-[50%] text-center">
+        <Layout>
+            <section className="flex flex-col items-center gap-2 p-4 max-w-[50em] text-center text-[.85em]">
                 <h1>Category name</h1>
                 <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores unde, suscipit nemo maiores optio, libero possimus quia alias sed earum dicta rem labore officia necessitatibus. Deserunt a laborum nemo non!</p>
             </section>
@@ -23,23 +17,13 @@ export default function Catalogue() {
             <section className="p-4 w-full flex justify-between">
                 <Filters
                     sortByOptions={sortByOptions}
-                    filters={filters} />
+                    filters={filters}
+                    categories={categories}
+                />
             </section>
 
-            <section className="w-full h-full grid grid-cols-3 gap-4">
-                {items?.map(item => {
-                    const isOnWishlist = wishlist.find(wishlistItem => wishlistItem === item._id)
-                    return (
-                        <Card
-                            key={item?._id}
-                            size='w-[31em] h-[45em]'
-                            item={item}
-                            isOnWishlist={isOnWishlist}
-                        />
-                    )
-                })}
-            </section>
-        </section>
+            <GridProducts items={items} />
+        </Layout>
     )
 }
 
@@ -76,15 +60,15 @@ export const loader = async ({ request, params }) => {
 
     const searchParams = url.searchParams;
     const searchParamsEntries = searchParams.entries();
-    const searchParamsLength = searchParams.size - 1;
 
-    const queryString = searchParamsEntries.reduce((queryAcc, [queryName, queryValue], index) => {
-        const isLastQuery = index === searchParamsLength ? '' : '&';
-        return queryAcc += queryName + '=' + queryValue + isLastQuery;
-    }, '')
+    let queryString = '';
 
-    const itemsPromise = fetch(apiEndpoints.items.productsCategory + '/' + category + '?' + queryString).then(response => response.json());
-    const filtersPromise = fetch('http://localhost:3000/filters/' + category + '?' + queryString).then(response => response.json());
+    for (const [queryName, queryValue] of searchParamsEntries) {
+        queryString += `${queryName}=${queryValue}&`
+    }
+
+    const itemsPromise = fetch('http://192.168.0.189:3000/products' + '/' + category + '?' + queryString).then(response => response.json());
+    const filtersPromise = fetch('http://192.168.0.189:3000/filters/' + category + '?' + queryString).then(response => response.json());
 
     const filters = await filtersPromise;
     const sortByQuery = searchParams.get('sortBy');

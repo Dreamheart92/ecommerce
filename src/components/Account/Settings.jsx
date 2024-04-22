@@ -16,13 +16,13 @@ export default function Settings({ firstName, lastName, email, id }) {
     const { data: editResponse,
         isLoading: isSubmitingEdit,
         sendRequest: editUserData,
-        error: editError } = useHttp('http://localhost:3000/user/' + id, null, httpOptions);
+        error: editError } = useHttp('http://192.168.0.189:3000/user/' + id, null, httpOptions);
 
     const { data: passwordChangeResponse,
         isLoading: isChangePasswordSubmited,
         sendRequest: changePassword,
         error: passwordChangeError,
-        setCustomError: setChangePasswordError } = useHttp('http://localhost:3000/user/password/' + id, null, httpOptions)
+        setCustomError: setChangePasswordError } = useHttp('http://192.168.0.189:3000/user/password/' + id, null, httpOptions)
 
     const handleEdit = (event) => {
         const data = submitHandler(event);
@@ -48,10 +48,9 @@ export default function Settings({ firstName, lastName, email, id }) {
     }, [passwordChangeResponse])
 
     return (
-        <section>
-            <h1 className="font-semibold text-xl">Settings</h1>
-
-            <section className="mt-4 w-full h-fit rounded-xl p-4 flex gap-4">
+        <section className="">
+            {/* <h1 className="font-semibold text-md mb-4">Settings</h1> */}
+            <section className="flex w-full h-full gap-4 flex-wrap justify-center items-center">
                 <section className="">
                     <form
                         onSubmit={handleEdit}

@@ -10,9 +10,11 @@ import { cartActions } from "./store/cart-slice.js";
 import { setUserDataToStore } from "./store/store.js";
 import { addCartToDb } from "./api/cart.js";
 import { wishlistActions } from "./store/wishlist-slice.js";
+import { useWindowSize } from "./hooks/useWindowSize.js";
+import MobileHeader from "./components/Header/MobileHeader.jsx";
 
 const syncCart = async (userId, cart, dispatch) => {
-  const response = await fetch(`http://localhost:3000/user/${userId}/cart`);
+  const response = await fetch(`http://192.168.0.189:3000/user/${userId}/cart`);
   const responseData = await response.json();
 
   cart.forEach(cartItem => {
@@ -31,6 +33,7 @@ function App() {
   const { user } = useSelector(state => state.user);
   const cart = useSelector(state => state.cart.cartItems);
   const wishlist = useSelector(state => state.wishlist);
+  const { isOnMobile } = useWindowSize();
 
   const dispatch = useDispatch();
 
@@ -73,7 +76,7 @@ function App() {
     if (user !== null) {
       const userId = user.user.id;
       const fetchWishlist = async () => {
-        await fetch('http://localhost:3000/user/wishlist/' + userId, {
+        await fetch('http://192.168.0.189:3000/user/wishlist/' + userId, {
           method: 'Post',
           headers: {
             'Content-type': 'application/json'
@@ -86,8 +89,9 @@ function App() {
   }, [wishlist])
 
   return (
-    <main className="w-full h-full flex flex-col items-center">
-      {!isOnCheckoutPage && <Header />}
+    <main id="main" className="max-w-full box-border p-0 m-0 h-full flex flex-col items-center">
+      {!isOnCheckoutPage && !isOnMobile && <Header />}
+      {isOnMobile && <MobileHeader />}
       <Cart />
       <Outlet />
       <ScrollRestoration />

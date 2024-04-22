@@ -19,11 +19,11 @@ export default function CartItem({ item }) {
 
     return (
         <section key={item.size.id} className="p-4 flex gap-2">
-            <section className="w-[9em] h-[10em]">
-                <img className="w-full h-full object-cover" src={item?.image} alt="" />
+            <section className="min-w-[6em] max-w-[9em] min-h-[7em] max-h-[42em]">
+                <img className="w-full h-full object-cover object-center" src={item?.image} alt="" />
             </section>
 
-            <section className="px-2">
+            <section className="text-sm">
                 <h1>{item.name}</h1>
                 <p className="first-letter:uppercase text-stone-400">{item.brand.name}</p>
 
