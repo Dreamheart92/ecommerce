@@ -9,8 +9,8 @@ export default function Hero() {
                 <source src={heroVideo} type="video/mp4" />
             </video>
 
-            <section className="absolute w-full h-full top-[80%] left-0 flex flex-col items-center gap-4">
-                <h3 className="text-white text-xl 2xl:text-3xl">Spring/Summer 2024 Womenswear </h3>
+            <section className="absolute w-full h-full top-[50%] left-0 flex flex-col items-center gap-4">
+                <h3 className="text-white text-xl 2xl:text-5xl">Spring/Summer 2024 Womenswear </h3>
                 {/* <Button variant='secondary'>EXPLORE COLLECTION</Button> */}
                 <button className="text-white underline">EXPLORE COLLECTION</button>
             </section>

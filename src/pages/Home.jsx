@@ -20,7 +20,7 @@ export default function Home() {
             <SliderContextProvider>
                 <section className="w-[95%] lg:w-[80%] h-full justify-center items-center mt-4">
                     <section className="flex flex-col w-full h-full text-center px-4 text-[1.1em] lg:text-[.85em] text-stone-900 gap-1 font-semibold mb-6">
-                        <p className="">New arrivals</p>
+                        <p className="font-bold text-xl mb-2">New arrivals</p>
                         <p className="">Step into style with our stunning new arrivals! 💃 Discover the latest trends and elevate your wardrobe with elegance and flair. #FashionForward</p>
                     </section>
 
