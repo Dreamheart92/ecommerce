@@ -1,15 +1,15 @@
 export const categories = [
     {
         name: 'Dresses',
-        imageUrl: '../assets/dresses.jpg'
+        imageUrl: '/src/assets/dresses.jgp'
     },
     {
         name: 'Tops',
-        imageUrl: '../assets/tops.jpg'
+        imageUrl: '/src/assets/tops.jpg'
     },
     {
         name: 'bottoms',
-        imageUrl: '../assets/bottoms.jpg'
+        imageUrl: '/src/assets/bottoms.jpg'
     }
 ]
 
