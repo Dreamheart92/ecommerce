@@ -1,15 +1,19 @@
+import dresses from "./assets/dresses.jpg";
+import tops from "./assets/tops.jpg";
+import bottoms from "./assets/bottoms.jpg";
+
 export const categories = [
     {
         name: 'Dresses',
-        imageUrl: '/src/assets/dresses.jgp'
+        imageUrl: dresses
     },
     {
         name: 'Tops',
-        imageUrl: '/src/assets/tops.jpg'
+        imageUrl: tops
     },
     {
         name: 'bottoms',
-        imageUrl: '/src/assets/bottoms.jpg'
+        imageUrl: bottoms
     }
 ]
 
