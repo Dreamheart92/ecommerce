@@ -49,7 +49,7 @@ function App() {
       syncCart(userId, cart, dispatch);
 
       const getWishlist = async () => {
-        const response = await fetch('http://localhost:3000/user/wishlist/' + userId);
+        const response = await fetch('https://rest-6apvqcaiz-toni-rachevs-projects.vercel.app/user/wishlist/' + userId);
         const wishlist = await response.json();
 
         dispatch(wishlistActions.setWishlist({ wishlist }));

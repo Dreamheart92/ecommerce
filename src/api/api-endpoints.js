@@ -1,4 +1,4 @@
-const baseUrl = 'http://192.168.0.189:3000';
+const baseUrl = 'https://rest-6apvqcaiz-toni-rachevs-projects.vercel.app';
 
 export const apiEndpoints = {
     auth: {

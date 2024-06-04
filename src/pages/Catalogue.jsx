@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import {useLoaderData} from "react-router-dom";
 
 import Filters from "../components/Filters.jsx";
 import Layout from "../components/Layout.jsx";
@@ -11,7 +11,9 @@ export default function Catalogue() {
         <Layout>
             <section className="flex flex-col items-center gap-2 p-4 max-w-[50em] text-center text-[.85em]">
                 <h1>Category name</h1>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores unde, suscipit nemo maiores optio, libero possimus quia alias sed earum dicta rem labore officia necessitatibus. Deserunt a laborum nemo non!</p>
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores unde, suscipit nemo maiores
+                    optio, libero possimus quia alias sed earum dicta rem labore officia necessitatibus. Deserunt a
+                    laborum nemo non!</p>
             </section>
 
             <section className="p-4 w-full flex justify-between">
@@ -22,12 +24,12 @@ export default function Catalogue() {
                 />
             </section>
 
-            <GridProducts items={items} />
+            <GridProducts items={items}/>
         </Layout>
     )
 }
 
-export const loader = async ({ request, params }) => {
+export const loader = async ({request, params}) => {
     const SORT_BY_OPTIONS = [
         {
             'price-high': {
@@ -55,7 +57,7 @@ export const loader = async ({ request, params }) => {
         }]
 
 
-    const { category } = params;
+    const {category} = params;
     const url = new URL(request.url);
 
     const searchParams = url.searchParams;
@@ -67,13 +69,13 @@ export const loader = async ({ request, params }) => {
         queryString += `${queryName}=${queryValue}&`
     }
 
-    const itemsPromise = fetch('http://192.168.0.189:3000/products' + '/' + category + '?' + queryString).then(response => response.json());
-    const filtersPromise = fetch('http://192.168.0.189:3000/filters/' + category + '?' + queryString).then(response => response.json());
+    const itemsPromise = fetch('https://rest-6apvqcaiz-toni-rachevs-projects.vercel.app/products' + '/' + category + '?' + queryString).then(response => response.json());
+    const filtersPromise = fetch('https://rest-6apvqcaiz-toni-rachevs-projects.vercel.app/filters/' + category + '?' + queryString).then(response => response.json());
 
     const filters = await filtersPromise;
     const sortByQuery = searchParams.get('sortBy');
 
-    const convertedFilters = filters.map(({ name, filters }) => {
+    const convertedFilters = filters.map(({name, filters}) => {
         const isInQuery = searchParams.has(name);
         const querySearchValues = isInQuery ? searchParams.get(name).split('|') : null;
 

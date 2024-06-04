@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Link, useLocation} from "react-router-dom";
 
 import MegaMenu from "./MegaMenu.jsx";
 
@@ -15,9 +15,9 @@ const collections = [
 ]
 
 export default function Menu({
-    isMegaMenuShown,
-    setIsMegaMenuShown
-}) {
+                                 isMegaMenuShown,
+                                 setIsMegaMenuShown
+                             }) {
     const location = useLocation();
     const [categories, setCategories] = useState([]);
 
@@ -31,7 +31,7 @@ export default function Menu({
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const response = await fetch('http://localhost:3000/categories');
+            const response = await fetch('https://rest-6apvqcaiz-toni-rachevs-projects.vercel.app/categories');
             const categories = await response.json();
             setCategories(categories);
         }
@@ -58,7 +58,7 @@ export default function Menu({
                     className="cursor-pointer relative h-full">
                     Ready to wear
 
-                    <MegaMenu isShown={isMegaMenuShown} items={categories} collections={collections} />
+                    <MegaMenu isShown={isMegaMenuShown} items={categories} collections={collections}/>
                 </li>
             </ul>
         </nav>
